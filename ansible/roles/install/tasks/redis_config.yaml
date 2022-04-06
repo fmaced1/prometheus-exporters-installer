@@ -1,0 +1,12 @@
+---
+- name: "Check that the /data/redis.conf exists"
+  stat:
+    path: "/data/redis.conf"
+  register: "redis_conf_file"
+
+- name: Create redis_exporter conf file
+  shell: |
+    REDISPASS=$(grep "^requirepass" /data/redis.conf | cut -d" " -f 2 | sed "s/\"//g")
+    sed -i -e "s/%%HOSTNAME%%/$HOSTNAME/g" /etc/systemd/system/{{ item.service_name}}.service
+    sed -i -e "s/%%REDISPASS%%/$REDISPASS/g" /etc/systemd/system/{{ item.service_name}}.service
+  become: true

@@ -1,0 +1,9 @@
+---
+- name: "Move binary to /usr/local/bin/"
+  copy:
+    src: "/tmp/{{ item.service_name}}"
+    dest: "{{ item.path_to_binary }}{{ item.service_name }}"
+    remote_src: yes
+    owner: "{{ item.exporter_username }}"
+    group: "{{ item.exporter_group }}"
+    mode: 0755

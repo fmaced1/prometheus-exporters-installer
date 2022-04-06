@@ -1,0 +1,5 @@
+---
+- name: Download exporter from artifactory.
+  get_url:
+    url: "{{ item.url_artifactory }}"
+    dest: "/tmp/{{ item.service_name }}"

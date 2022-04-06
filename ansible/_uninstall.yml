@@ -1,0 +1,112 @@
+---
+- hosts: node
+  become: True
+  become_user: root
+  vars:
+    prometheus_exporters_params:
+      - name: Node Exporter
+        binary_name: node_exporter
+        service_name: node_exporter
+        path_to_binary: /usr/local/bin/
+        exporter_username: root
+        exporter_group: root
+        files_to_remove:
+          - /etc/systemd/system/node_exporter.service
+          - /usr/local/bin/node_exporter/
+          - /etc/init.d/node_exporter
+          - /var/lock/subsys/node_exporter
+          - /var/lock/subsys/node_exporter
+          - /var/run/node_exporter
+  roles:
+    - role: uninstall
+      when: exporter == 'node_exporter' and exporter_action == 'uninstall'
+
+- hosts: redis
+  become: True
+  become_user: root
+  vars:
+    prometheus_exporters_params:
+      - name: Redis Exporter
+        binary_name: redis_exporter
+        service_name: redis_exporter
+        path_to_binary: /usr/local/bin/
+        exporter_username: root
+        exporter_group: root
+        files_to_remove:
+          - /etc/systemd/system/redis_exporter.service
+          - /usr/local/bin/redis_exporter/
+          - /etc/init.d/redis_exporter
+          - /var/lock/subsys/redis_exporter
+          - /var/lock/subsys/redis_exporter
+          - /var/run/redis_exporter
+  roles:
+    - role: uninstall
+      when: exporter == 'redis_exporter' and exporter_action == 'uninstall'
+
+- hosts: redis_sentinel
+  become: True
+  become_user: root
+  vars:
+    prometheus_exporters_params:
+      - name: Redis Sentinel Exporter
+        binary_name: redis_exporter
+        service_name: redis_sentinel_exporter
+        path_to_binary: /usr/local/bin/
+        exporter_username: root
+        exporter_group: root
+        files_to_remove:
+          - /etc/systemd/system/redis_sentinel_exporter.service
+          - /usr/local/bin/redis_sentinel_exporter/
+          - /etc/init.d/redis_sentinel_exporter
+          - /var/lock/subsys/redis_sentinel_exporter
+          - /var/lock/subsys/redis_sentinel_exporter
+          - /var/run/redis_sentinel_exporter
+  roles:
+    - role: uninstall
+      when: exporter == 'redis_sentinel_exporter' and exporter_action == 'uninstall'
+
+- hosts: oracledb_exporter
+  become: True
+  become_user: root
+  vars:
+    prometheus_exporters_params:
+      - name: Oracle DB Exporter
+        binary_name: oracledb_exporter
+        service_name: oracledb_exporter
+        path_to_binary: /usr/local/bin/
+        exporter_username: root
+        exporter_group: root
+        files_to_remove:
+          - /etc/systemd/system/oracledb_exporter.service
+          - /usr/local/bin/oracledb_exporter
+          - /etc/init.d/oracledb_exporter
+          - /var/lock/subsys/oracledb_exporter
+          - /var/lock/subsys/oracledb_exporter
+          - /var/run/oracledb_exporter
+          - /etc/oracledb_exporter
+  roles:
+    - role: uninstall
+      when: exporter == 'oracledb_exporter' and exporter_action == 'uninstall'
+
+- hosts: nginx_exporter
+  become: True
+  become_user: root
+  vars:
+    prometheus_exporters_params:
+      - name: Nginx Exporter
+        binary_name: nginx_exporter
+        service_name: nginx_exporter
+        path_to_binary: /usr/local/bin/
+        exporter_username: root
+        exporter_group: root
+        files_to_remove:
+          - /etc/systemd/system/nginx_exporter.service
+          - /usr/local/bin/nginx_exporter
+          - /etc/init.d/nginx_exporter
+          - /var/lock/subsys/nginx_exporter
+          - /var/lock/subsys/nginx_exporter
+          - /var/run/nginx_exporter
+          - /etc/nginx_exporter
+  roles:
+    - role: uninstall
+      when: exporter == 'nginx_exporter' and exporter_action == 'uninstall'

@@ -1,0 +1,5 @@
+---
+- name: "Removing tar.gz"
+  file:
+    path: /tmp/{{ item.service_name}}.tar.gz
+    state: absent

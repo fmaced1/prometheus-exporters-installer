@@ -1,0 +1,7 @@
+---
+- name: Uncompress exporter releases.
+  unarchive:
+    remote_src: yes
+    src: "/tmp/{{ item.service_name}}.tar.gz"
+    dest: "{{ item.path_to_binary }}{{ item.service_name }}"
+    extra_opts: "--strip-components=1"

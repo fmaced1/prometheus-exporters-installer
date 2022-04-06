@@ -1,0 +1,8 @@
+---
+- name: Removing files
+  file:
+    path: '{{ item.1 }}'
+    state: absent
+  with_subelements:
+    - "{{ prometheus_exporters_params }}"
+    - files_to_remove

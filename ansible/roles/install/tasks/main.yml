@@ -1,0 +1,51 @@
+---
+- name: Download exporter from artifactory.
+  include_tasks: download_artifactory.yaml
+  with_items: "{{ prometheus_exporters_params }}"
+  when: item.url_artifactory is defined
+
+- name: Download exporter from github.
+  include_tasks: download_github.yaml
+  with_items: "{{ prometheus_exporters_params }}"
+  when: item.url_artifactory is not defined and item.url_github is defined
+
+- name: Create exporters directory.
+  include_tasks: mkdir_service.yaml
+  with_items: "{{ prometheus_exporters_params }}"
+
+- name: Uncompress exporter releases.
+  include_tasks: uncompress.yaml
+  with_items: "{{ prometheus_exporters_params }}"
+  when: item.url_artifactory is not defined and item.url_github is defined
+
+- name: "Move binary to /usr/local/bin/"
+  include_tasks: move_binary.yaml
+  with_items: "{{ prometheus_exporters_params }}"
+  when: item.url_artifactory is defined
+
+- name: Create exporters config directory.
+  include_tasks: mkdir_config.yaml
+  with_items: "{{ prometheus_exporters_params }}"
+  when: item.service_name == 'oracledb_exporter'
+
+- name: "Copy config file"
+  include_tasks: copy_config_file.yaml
+  with_items: "{{ prometheus_exporters_params }}"
+  when: item.service_name == 'oracledb_exporter'
+
+- name: "Install unit file to systemd"
+  include_tasks: install_unit_systemd.yaml
+  with_items: "{{ prometheus_exporters_params }}"
+
+- name: Redis config setup
+  include_tasks: redis_config.yaml
+  with_items: "{{ prometheus_exporters_params }}"
+  when: "item.service_name == 'redis_exporter' and redis_conf_file.stat.exists"
+
+- name: "Configure systemd to use service"
+  include_tasks: config_systemd.yaml
+  with_items: "{{ prometheus_exporters_params }}"
+
+- name: "Removing tar.gz"
+  include_tasks: remove_installation_pkgs.yaml
+  with_items: "{{ prometheus_exporters_params }}"

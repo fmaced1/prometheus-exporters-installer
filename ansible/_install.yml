@@ -1,0 +1,97 @@
+---
+- hosts: node
+  become: True
+  become_user: root
+  #gather_facts: no
+  vars:
+    prometheus_exporters_params:
+      - name: Node Exporter
+        url_github: https://github.com/prometheus/node_exporter/releases/download/v1.1.2/node_exporter-1.1.2.linux-amd64.tar.gz
+        binary_name: node_exporter
+        service_name: node_exporter
+        path_to_binary: /usr/local/bin/
+        exporter_username: root
+        exporter_group: root
+        exporter_version: 1.1.2
+        exec_start_args: ""
+  roles:
+    - role: install
+      when: exporter == 'node_exporter' and exporter_action == 'install'
+
+- hosts: redis
+  become: True
+  become_user: root
+  #gather_facts: no
+  vars:
+    prometheus_exporters_params:
+      - name: Redis Exporter
+        url_github: https://github.com/oliver006/redis_exporter/releases/download/v1.24.0/redis_exporter-v1.24.0.linux-amd64.tar.gz
+        binary_name: redis_exporter
+        service_name: redis_exporter
+        path_to_binary: /usr/local/bin/
+        exporter_username: root
+        exporter_group: root
+        exporter_version: 1.24.0
+        exec_start_args: "-web.listen-address ':9121' -redis.addr 'redis://%%HOSTNAME%%:6379' -redis.password '%%REDISPASS%%'"
+  roles:
+    - role: install
+      when: exporter == 'redis_exporter' and exporter_action == 'install'
+
+- hosts: redis_sentinel
+  become: True
+  become_user: root
+  #gather_facts: no
+  vars:
+    prometheus_exporters_params:
+      - name: Redis Sentinel Exporter
+        url_github: https://github.com/oliver006/redis_exporter/releases/download/v1.24.0/redis_exporter-v1.24.0.linux-amd64.tar.gz
+        binary_name: redis_exporter
+        service_name: redis_sentinel_exporter
+        path_to_binary: /usr/local/bin/
+        exporter_username: root
+        exporter_group: root
+        exporter_version: 1.24.0
+        exec_start_args: ""
+  roles:
+    - role: install
+      when: exporter == 'redis_sentinel_exporter' and exporter_action == 'install'
+
+- hosts: oracledb_exporter
+  become: True
+  become_user: root
+  #gather_facts: no
+  vars:
+    prometheus_exporters_params:
+      - name: Oracle DB Exporter
+        url_github: https://github.com/iamseth/oracledb_exporter/releases/download/0.3.0rc1/oracledb_exporter.0.3.0rc1-ora18.5.linux-amd64.tar.gz
+        binary_name: oracledb_exporter
+        service_name: oracledb_exporter
+        path_to_binary: /usr/local/bin/
+        config_directory: /etc/oracledb_exporter/
+        exporter_username: root
+        exporter_group: root
+        exporter_version: 0.3.0
+        exec_start_args: "--default.metrics '/etc/oracledb_exporter/default-metrics.toml' --log.level error --web.listen-address 0.0.0.0:9161"
+  roles:
+    - role: install
+      when: exporter == 'oracledb_exporter' and exporter_action == 'install'
+
+- hosts: nginx_exporter
+  become: True
+  become_user: root
+  #gather_facts: no
+  vars:
+    prometheus_exporters_params:
+      - name: Nginx Exporter
+        url_github: https://github.com/nginxinc/nginx-prometheus-exporter/releases/download/v0.9.0/nginx-prometheus-exporter_0.9.0_linux_amd64.tar.gz
+        binary_name: nginx_exporter
+        service_name: nginx_exporter
+        path_to_binary: /usr/local/bin/
+        config_directory: /etc/nginx_exporter/
+        exporter_username: root
+        exporter_group: root
+        exporter_version: 0.9.0
+        exec_start_args: "-nginx.scrape-uri=http://localhost:8080/nginx_status -web.listen-address=:9113"
+  roles:
+    - role: install
+      when: exporter == 'nginx_exporter' and exporter_action == 'install'

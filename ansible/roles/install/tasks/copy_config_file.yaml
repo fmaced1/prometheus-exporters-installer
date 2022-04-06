@@ -1,0 +1,16 @@
+---
+- name: "Copy config file"
+  template:
+    src: templates/default-metrics.toml
+    dest: "{{ item.config_directory }}/default-metrics.toml"
+    owner: "{{ item.exporter_username }}"
+    group: "{{ item.exporter_group }}"
+    mode: 0755
+
+- name: "Copy config file"
+  template:
+    src: templates/ros.env
+    dest: "{{ item.config_directory }}/ros.env"
+    owner: root
+    group: root
+    mode: 0600

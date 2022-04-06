@@ -1,0 +1,6 @@
+---
+- name: Download exporter from github.
+  get_url:
+    url: "{{ item.url_github }}"
+    dest: "/tmp/{{ item.service_name }}.tar.gz"
+    mode: 0755

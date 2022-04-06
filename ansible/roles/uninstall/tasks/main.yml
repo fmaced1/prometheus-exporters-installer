@@ -1,0 +1,6 @@
+---
+- name: Disable exporter service
+  include_tasks: disable_service.yaml
+
+- name: Removing files
+  include_tasks: remove_files.yaml

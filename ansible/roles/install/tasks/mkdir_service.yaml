@@ -1,0 +1,5 @@
+---
+- name: Create exporters directory.
+  file:
+    path: "{{ item.path_to_binary }}{{ item.service_name }}"
+    state: directory

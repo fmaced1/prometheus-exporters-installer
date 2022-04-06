@@ -1,0 +1,49 @@
+version: "3"
+services:
+
+  ansible:
+    container_name: ansible
+    image: ansible
+    tty: true
+    stdin_open: true
+    build:
+        context: ./docker_images
+        dockerfile: ./ansible/Dockerfile
+    volumes:
+      - ./ansible:/home/ansible/
+    privileged: true
+    command: /usr/sbin/init
+    network_mode: bridge
+    networks:
+      - net
+
+  host_01:
+    container_name: host_01
+    image: ubuntu20_04
+    build:
+        context: ./docker_images
+        dockerfile: ./ubuntu20_04/Dockerfile
+    privileged: true
+    command: /usr/sbin/init
+    network_mode: bridge
+    networks:
+      - net
+    depends_on:
+      - ansible
+      
+  host_02:
+    container_name: host_02
+    image: ubuntu20_04
+    build:
+        context: ./docker_images
+        dockerfile: ./ubuntu20_04/Dockerfile
+    privileged: true
+    command: /usr/sbin/init
+    network_mode: bridge
+    networks:
+      - net
+    depends_on:
+      - ansible
+
+networks:
+  net:

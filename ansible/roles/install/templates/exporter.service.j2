@@ -1,0 +1,21 @@
+# {{ ansible_managed }}
+
+[Unit]
+Description=Prometheus {{ item.name }}
+After=local-fs.target network-online.target network.target
+Wants=local-fs.target network-online.target network.target
+ 
+[Service]
+Type=simple
+User={{ item.exporter_username }}
+Group={{ item.exporter_group }}
+Restart=on-failure
+
+{% if item.service_name == 'oracledb_exporter' %}
+EnvironmentFile="{{ item.config_directory }}/ros.env"
+{% endif %}
+
+ExecStart={{ item.path_to_binary }}{{ item.service_name }}/{{ item.binary_name }} {{ item.exec_start_args }}
+ 
+[Install]
+WantedBy=multi-user.target

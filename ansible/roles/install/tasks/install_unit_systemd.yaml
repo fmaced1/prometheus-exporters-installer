@@ -1,0 +1,8 @@
+--- 
+- name: "Install unit file to systemd"
+  template:
+    src: templates/exporter.service.j2
+    dest: "/etc/systemd/system/{{ item.service_name }}.service"
+    owner: "{{ item.exporter_username }}"
+    group: "{{ item.exporter_group }}"
+    mode: 0755

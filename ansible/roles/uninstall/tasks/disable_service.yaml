@@ -1,0 +1,7 @@
+---
+- name: Disable exporter service
+  systemd:
+    enabled: no
+    state: stopped
+    name: "{{ item.service_name }}.service"
+  with_items: "{{ prometheus_exporters_params }}"

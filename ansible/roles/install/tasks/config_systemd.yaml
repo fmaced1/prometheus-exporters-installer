@@ -1,0 +1,7 @@
+---
+- name: "Configure systemd to use service"
+  systemd:
+    daemon_reload: yes
+    enabled: yes
+    state: started
+    name: "{{ item.service_name}}.service"

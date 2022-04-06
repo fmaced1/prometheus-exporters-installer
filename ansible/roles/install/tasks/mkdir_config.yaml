@@ -1,0 +1,5 @@
+---
+- name: Create exporters config directory.
+  file:
+    path: "{{ item.config_directory }}"
+    state: directory
